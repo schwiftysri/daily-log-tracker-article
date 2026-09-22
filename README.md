@@ -219,14 +219,10 @@ for reference — the one above supersedes it.)*
 
 ![Ask for Text: Notes for today, Set variable Note](images/02-retro-note-input.jpg)
 
-![Get Contents of URL, JSON body wired to Mood/Energy/Note, type retro](images/05-retro-json-body.jpg)
+![Get Contents of URL, JSON body wired to Mood/Energy/Note, type retro](images/01-log-task-get-contents-url.jpg)
 
 *Mood and Energy are required here (no Skip option) since this is the one
 guaranteed daily data point; Note is optional.*
-
-(An earlier version of this same JSON-body screen, before I'd finished
-adjusting it, is in [`images/01-log-task-get-contents-url.jpg`](images/01-log-task-get-contents-url.jpg)
-for reference.)
 
 ---
 
@@ -243,29 +239,7 @@ become `"test 1"`, and `Mood`/`Energy` had both become `2` (the TimeTaken
 value). Every field downstream of Task had inherited an earlier variable's
 value instead of its own.
 
-The cause, once traced: in the Shortcuts app, tapping into a value field
-brings up a suggestions bar of recently-used variables right above the
-keyboard — and it's very easy to tap the wrong pill, especially when a
-just-used variable (like Task) is sitting right there. This had happened
-**four times in a row**, for Urgent, Important, Mood, and Energy, each
-accidentally pointing back at whatever variable was set immediately before
-it, rather than that field's own `Menu Result`.
-
-The fix was mechanical but instructive: open each `Set Variable` action,
-clear whatever pill was actually sitting in the value field, and explicitly
-re-insert the correct `Menu Result` (or, since I'd already typed the menu
-items themselves as literal `Y`/`N`/`Positive`/etc., `Menu Result` already
-*was* the exact string needed — no extra conversion required).
-
-**Worth knowing about Choose from Menu vs Choose from List**, since it's easy
-to conflate: *Choose from Menu* branches — each option gets its own set of
-actions right there in the shortcut, like a switch statement. *Choose from
-List* just returns a single value from a list and continues in one path. For
-small, fixed option sets like these, either works; I ended up using each
-menu's own branches to set the variable directly inside each option (no
-separate `If` action needed), which removes the "wrong pill" failure mode
-entirely for that field, since there's no variable-picker step at all —
-just literal text typed directly into each branch.
+I later was able to solve this with help from the following reddit post https://www.reddit.com/r/shortcuts/comments/1i37wun/how_do_i_store_a_variable_from_a_menu_selection/
 
 ---
 
@@ -307,26 +281,6 @@ cheapest to most realistic:
 3. **The Shortcut itself**, last, once 1 and 2 both work — so that if
    something's still wrong, you already know it's the Shortcut's wiring, not
    the script.
-
----
-
-## A note on security, since this article has screenshots
-
-Every screenshot in this repo that originally showed the live deployment
-URL, Deployment ID, or the Google account email tied to the project has been
-blacked out — not just blurred, fully covered with solid rectangles, since a
-blur or a thin marker stroke can still leak edges (an earlier redaction
-attempt of mine, visible faintly at the very edges of a couple of the
-Shortcuts screenshots, did exactly that before I fixed it here). If you're
-publishing your own version of this walkthrough:
-
-- Treat your `/exec` URL as a credential once it's paired with your secret —
-  don't post it, even redacted "by eye."
-- Change the placeholder `SECRET` in `Code.gs` to your own long random string
-  before deploying — the version in this repo is intentionally left as
-  `'PASSWORD'`.
-- A solid black rectangle, fully covering the text with margin, beats a blur
-  or a hand-drawn marker scribble — those can leave a legible edge.
 
 ---
 
